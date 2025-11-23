@@ -68,6 +68,9 @@ export async function POST(request: NextRequest) {
     }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
+    console.log("[v0] NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL)
+    console.log("[v0] request.nextUrl.origin:", request.nextUrl.origin)
+    console.log("[v0] Using appUrl:", appUrl)
     const shareUrl = `${appUrl}/m/${data.id}`
 
     return NextResponse.json({
