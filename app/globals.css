@@ -149,6 +149,18 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 60px rgba(210, 180, 222, 0.15);
 }
 
+/* Added dark glassmorphic styles for ShareApp */
+.glass-dark {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.glass-dark:hover {
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 40px rgba(34, 197, 94, 0.2);
+}
+
 .glow-border {
   border: 1px solid var(--border-glow);
   box-shadow: 0 0 20px rgba(210, 180, 222, 0.3), inset 0 0 20px rgba(210, 180, 222, 0.05);

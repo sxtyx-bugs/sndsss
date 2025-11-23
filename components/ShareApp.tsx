@@ -4,11 +4,11 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Copy, Clock, Share, AlertTriangle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import DotGrid from "@/components/DotGrid"
 
 interface ShareResult {
   id: string
@@ -126,138 +126,146 @@ export default function ShareApp() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-foreground mb-2" data-testid="title-main">
-            Secure Text Sharing
-          </h1>
-          <p className="text-muted-foreground">Share text and code snippets with automatic expiration</p>
-        </div>
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <DotGrid dotColor="rgba(34, 197, 94, 0.15)" hoverColor="rgb(34, 197, 94)" dotSize={2} spacing={30} />
 
-        {!shareResult ? (
-          <Card className="mb-6" data-testid="card-share-form">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Share className="h-5 w-5" />
-                Create New Share
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="content" data-testid="label-content">
-                  Content to Share
-                </Label>
-                <Textarea
-                  id="content"
-                  data-testid="textarea-content"
-                  placeholder="Paste your text or code here..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="min-h-[200px] font-mono text-sm resize-none"
-                />
+      <div className="relative z-10 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-semibold text-white mb-2" data-testid="title-main">
+              Secure Text Sharing
+            </h1>
+            <p className="text-gray-400">Share text and code snippets with automatic expiration</p>
+          </div>
+
+          {!shareResult ? (
+            <div className="glass-dark rounded-2xl p-8 mb-6 backdrop-blur-xl bg-black/80 border border-green-500/20 shadow-2xl">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold flex items-center gap-2 text-white">
+                  <Share className="h-5 w-5 text-green-400" />
+                  Create New Share
+                </h2>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="expiration" data-testid="label-expiration">
-                  Expiration Time
-                </Label>
-                <Select value={expirationTime} onValueChange={setExpirationTime}>
-                  <SelectTrigger data-testid="select-expiration">
-                    <SelectValue placeholder="Select expiration time" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="30s" data-testid="option-30sec">
-                      30 seconds
-                    </SelectItem>
-                    <SelectItem value="60s" data-testid="option-60sec">
-                      1 minute
-                    </SelectItem>
-                    <SelectItem value="5" data-testid="option-5min">
-                      5 minutes
-                    </SelectItem>
-                    <SelectItem value="10" data-testid="option-10min">
-                      10 minutes
-                    </SelectItem>
-                    <SelectItem value="30" data-testid="option-30min">
-                      30 minutes
-                    </SelectItem>
-                    <SelectItem value="60" data-testid="option-1hour">
-                      1 hour
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="content" className="text-gray-300">
+                    Content to Share
+                  </Label>
+                  <Textarea
+                    id="content"
+                    placeholder="Paste your text or code here..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="min-h-[200px] font-mono text-sm resize-none bg-black/50 border-green-500/30 text-white placeholder:text-gray-500 focus:border-green-400 focus:ring-green-400/50"
+                  />
+                </div>
 
-              <div className="bg-muted/50 p-4 rounded-md">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5" />
-                  <div className="text-sm text-muted-foreground">
-                    <p className="font-medium text-foreground mb-1">Privacy Notice</p>
-                    <p>
-                      Your content will be automatically processed for security and will self-destruct after the
-                      selected time period. No data is permanently stored.
-                    </p>
+                <div className="space-y-2">
+                  <Label htmlFor="expiration" className="text-gray-300">
+                    Expiration Time
+                  </Label>
+                  <Select value={expirationTime} onValueChange={setExpirationTime}>
+                    <SelectTrigger className="bg-black/50 border-green-500/30 text-white focus:border-green-400 focus:ring-green-400/50">
+                      <SelectValue placeholder="Select expiration time" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black border-green-500/30">
+                      <SelectItem value="30s" className="text-white hover:bg-green-500/20">
+                        30 seconds
+                      </SelectItem>
+                      <SelectItem value="60s" className="text-white hover:bg-green-500/20">
+                        1 minute
+                      </SelectItem>
+                      <SelectItem value="5" className="text-white hover:bg-green-500/20">
+                        5 minutes
+                      </SelectItem>
+                      <SelectItem value="10" className="text-white hover:bg-green-500/20">
+                        10 minutes
+                      </SelectItem>
+                      <SelectItem value="30" className="text-white hover:bg-green-500/20">
+                        30 minutes
+                      </SelectItem>
+                      <SelectItem value="60" className="text-white hover:bg-green-500/20">
+                        1 hour
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="bg-green-500/10 p-4 rounded-lg border border-green-500/30">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-green-400 mt-0.5" />
+                    <div className="text-sm text-gray-300">
+                      <p className="font-medium text-white mb-1">Privacy Notice</p>
+                      <p>
+                        Your content will be automatically processed for security and will self-destruct after the
+                        selected time period. No data is permanently stored.
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                <Button
+                  onClick={handleShare}
+                  disabled={isSharing || !content.trim()}
+                  className="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 rounded-lg transition-all shadow-lg shadow-green-500/20 hover:shadow-green-500/40"
+                >
+                  {isSharing ? "Processing..." : "Create Secure Share"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="glass-dark rounded-2xl p-8 mb-6 backdrop-blur-xl bg-black/80 border border-green-500/40 shadow-2xl">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold flex items-center gap-2 text-green-400">
+                  <Share className="h-5 w-5" />
+                  Share Created Successfully
+                </h2>
               </div>
 
-              <Button
-                onClick={handleShare}
-                disabled={isSharing || !content.trim()}
-                className="w-full"
-                data-testid="button-share"
-              >
-                {isSharing ? "Processing..." : "Create Secure Share"}
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="mb-6" data-testid="card-share-result">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-green-600">
-                <Share className="h-5 w-5" />
-                Share Created Successfully
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label data-testid="label-share-url">Share URL</Label>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label className="text-gray-300">Share URL</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={shareResult.url}
+                      readOnly
+                      className="font-mono text-sm bg-black/50 border-green-500/30 text-white"
+                    />
+                    <Button
+                      onClick={() => handleCopy(shareResult.url)}
+                      size="icon"
+                      className="bg-green-600 hover:bg-green-500 border-green-500/30"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm text-gray-300">
+                  <Clock className="h-4 w-4 text-green-400" />
+                  <span>Expires at {new Date(shareResult.expiresAt).toLocaleString()}</span>
+                </div>
+
                 <div className="flex gap-2">
-                  <Input value={shareResult.url} readOnly className="font-mono text-sm" data-testid="input-share-url" />
                   <Button
                     onClick={() => handleCopy(shareResult.url)}
-                    size="icon"
-                    variant="outline"
-                    data-testid="button-copy-url"
+                    className="bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-500/20"
                   >
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-4 w-4 mr-2" />
+                    Copy Link
+                  </Button>
+                  <Button onClick={resetForm} className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600">
+                    Create Another
                   </Button>
                 </div>
               </div>
+            </div>
+          )}
 
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span data-testid="text-expiry-time">
-                  Expires at {new Date(shareResult.expiresAt).toLocaleString()}
-                </span>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={() => handleCopy(shareResult.url)} variant="default" data-testid="button-copy-main">
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy Link
-                </Button>
-                <Button onClick={resetForm} variant="outline" data-testid="button-create-another">
-                  Create Another
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <div className="text-center text-sm text-muted-foreground">
-          <p>All shares are automatically deleted after expiration. No permanent storage.</p>
+          <div className="text-center text-sm text-gray-500">
+            <p>All shares are automatically deleted after expiration. No permanent storage.</p>
+          </div>
         </div>
       </div>
     </div>

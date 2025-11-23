@@ -1,36 +1,38 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight, Lock, Zap, Shield } from "lucide-react"
+import { ChevronRight, Home } from "lucide-react"
 import { ScrollReveal } from "@/components/ScrollReveal"
 
-const navItems = [
-  { label: "Getting Started", href: "#" },
-  { label: "Core Concepts", href: "#" },
-  { label: "API Reference", href: "#" },
-  { label: "Security", href: "#" },
-  { label: "Examples", href: "#" },
-  { label: "Best Practices", href: "#" },
-  { label: "FAQ", href: "#" },
-  { label: "Support", href: "#" },
-]
-
-const features = [
-  {
-    icon: Lock,
-    title: "End-to-End Encrypted",
-    description: "Your messages are encrypted client-side before leaving your device.",
-  },
-  {
-    icon: Zap,
-    title: "Auto-Destructing",
-    description: "Messages self-destruct after viewing or expiration time.",
-  },
-  {
-    icon: Shield,
-    title: "Private & Secure",
-    description: "No tracking, no logs, no analytics. Your privacy is paramount.",
-  },
+const topicsList = [
+  "HTML HOME",
+  "HTML Introduction",
+  "HTML Editors",
+  "HTML Basic",
+  "HTML Elements",
+  "HTML Attributes",
+  "HTML Headings",
+  "HTML Paragraphs",
+  "HTML Styles",
+  "HTML Formatting",
+  "HTML Quotations",
+  "HTML Comments",
+  "HTML Colors",
+  "HTML CSS",
+  "HTML Links",
+  "HTML Images",
+  "HTML Tables",
+  "HTML Lists",
+  "HTML Block & Inline",
+  "HTML Div",
+  "HTML Classes",
+  "HTML Id",
+  "HTML Iframes",
+  "HTML JavaScript",
+  "HTML File Paths",
+  "HTML Head",
+  "HTML Layout",
+  "HTML Responsive",
 ]
 
 interface CodeVaultLandingProps {
@@ -38,172 +40,218 @@ interface CodeVaultLandingProps {
 }
 
 export default function CodeVaultLanding({ onEnter }: CodeVaultLandingProps) {
-  const [hoveredNav, setHoveredNav] = useState<string | null>(null)
+  const [hoveredTopic, setHoveredTopic] = useState<string | null>(null)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-950/50 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onEnter}
-              className="text-2xl font-bold tracking-wider hover:text-cyan-400 transition-colors duration-300 text-white"
-            >
-              SNDSS
-            </button>
-            <span className="text-slate-500 text-sm ml-2">Secure Message Sharing</span>
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Top Navigation Bar */}
+      <nav className="bg-[#1a1a1a] border-b border-gray-800">
+        <div className="flex items-center justify-between px-4 h-12">
+          <div className="flex items-center gap-6">
+            <div className="text-white font-bold text-xl tracking-wide">
+              CodeVault
+              <button onClick={onEnter} className="text-green-400 hover:text-green-300 transition-colors">
+                HTML
+              </button>{" "}
+              Reference
+            </div>
           </div>
-          <button
-            onClick={onEnter}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-cyan-400 text-sm font-medium transition-all duration-300"
-          >
+          <button className="px-4 py-1.5 bg-gray-700 text-white text-sm font-semibold rounded cursor-default">
             Access
           </button>
         </div>
-      </header>
+      </nav>
 
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 border-r border-slate-800 bg-slate-950/30 backdrop-blur-sm min-h-[calc(100vh-73px)] overflow-y-auto sticky top-[73px]">
-          <nav className="p-4 space-y-1">
-            <div className="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-              Documentation
+        {/* Left Sidebar */}
+        <aside className="w-64 bg-[#111] border-r border-gray-800 min-h-[calc(100vh-48px)] overflow-y-auto">
+          <div className="p-4">
+            <div className="mb-4">
+              <h2 className="text-white font-bold text-lg mb-3">HTML Tutorial</h2>
             </div>
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onMouseEnter={() => setHoveredNav(item.label)}
-                onMouseLeave={() => setHoveredNav(null)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
-                  hoveredNav === item.label ? "text-cyan-400 bg-slate-800/50" : "text-slate-400 hover:text-slate-300"
-                }`}
-              >
-                <ChevronRight className="w-4 h-4" />
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            <nav className="space-y-0.5">
+              {topicsList.map((topic, index) => (
+                <button
+                  key={topic}
+                  onClick={index === 0 ? onEnter : undefined}
+                  onMouseEnter={() => setHoveredTopic(topic)}
+                  onMouseLeave={() => setHoveredTopic(null)}
+                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                    index === 0
+                      ? "bg-green-600 text-white font-semibold cursor-pointer"
+                      : hoveredTopic === topic
+                        ? "bg-gray-800 text-white cursor-default"
+                        : "text-gray-400 cursor-default"
+                  }`}
+                >
+                  {topic}
+                </button>
+              ))}
+            </nav>
+          </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 min-h-[calc(100vh-73px)] overflow-y-auto">
-          {/* Hero Section */}
-          <section className="border-b border-slate-800 bg-gradient-to-b from-slate-900/50 to-transparent">
-            <div className="max-w-4xl mx-auto px-6 py-16 sm:py-24">
-              <ScrollReveal
-                size="xl"
-                align="left"
-                enableBlur={true}
-                baseOpacity={0.2}
-                staggerDelay={0.08}
-                containerClassName="mb-8"
-                textClassName="text-white font-bold tracking-tight"
-              >
-                Learn Web Development the Right Way
-              </ScrollReveal>
+        {/* Main Content Area */}
+        <main className="flex-1 bg-[#0a0a0a] min-h-[calc(100vh-48px)] overflow-y-auto">
+          {/* Breadcrumb Navigation */}
+          <div className="bg-[#111] border-b border-gray-800 px-8 py-3 flex items-center gap-2 text-sm">
+            <Home className="w-4 h-4 text-green-400" />
+            <ChevronRight className="w-3 h-3 text-gray-600" />
+            <span className="text-gray-400">HTML Tutorial</span>
+          </div>
 
-              <ScrollReveal
-                size="md"
-                align="left"
-                enableBlur={true}
-                baseOpacity={0.3}
-                staggerDelay={0.05}
-                containerClassName="mb-10"
-                textClassName="text-slate-300 font-normal"
-              >
-                Master modern web technologies with interactive tutorials, real-world examples, and hands-on practice.
-                Start your coding journey today.
-              </ScrollReveal>
+          {/* Hero Content */}
+          <div className="max-w-5xl mx-auto px-8 py-12">
+            {/* Main Title with Animation */}
+            <ScrollReveal
+              size="2xl"
+              align="left"
+              enableBlur={true}
+              baseOpacity={0.1}
+              staggerDelay={0.08}
+              containerClassName="mb-8"
+              textClassName="text-white font-bold tracking-tight"
+            >
+              HTML Tutorial
+            </ScrollReveal>
 
-              <button
-                onClick={onEnter}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-cyan-500/50"
-              >
-                Enter Application
+            {/* Navigation Buttons */}
+            <div className="flex gap-4 mb-12">
+              <button className="flex items-center gap-2 px-5 py-2 bg-gray-700 text-white font-semibold rounded cursor-default">
+                <ChevronRight className="w-4 h-4 rotate-180" />
+                Home
+              </button>
+              <button className="flex items-center gap-2 px-5 py-2 bg-gray-700 text-white font-semibold rounded cursor-default">
+                Next
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
-          </section>
 
-          {/* Content Section */}
-          <section className="max-w-4xl mx-auto px-6 py-16">
-            <div className="space-y-12">
-              {/* Features */}
-              <div>
-                <ScrollReveal size="lg" align="left" containerClassName="mb-8" textClassName="text-white font-bold">
-                  Why SNDSS?
-                </ScrollReveal>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {features.map((feature, i) => {
-                    const Icon = feature.icon
-                    return (
-                      <div
-                        key={i}
-                        className="p-6 rounded-lg border border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-900/50 transition-all duration-300"
-                      >
-                        <Icon className="w-8 h-8 text-cyan-400 mb-4" />
-                        <h3 className="font-semibold text-white mb-2">{feature.title}</h3>
-                        <p className="text-sm text-slate-400">{feature.description}</p>
-                      </div>
-                    )
-                  })}
+            {/* Main Heading */}
+            <h1 className="text-4xl font-bold text-white mb-8">Learn HTML</h1>
+
+            {/* Description Text */}
+            <div className="space-y-4 mb-12 text-gray-300 text-lg">
+              <p>HTML is the standard markup language for Web pages.</p>
+              <p>With HTML you can create your own Website.</p>
+              <p>HTML is easy to learn - You will enjoy it!</p>
+              <p>
+                HTML stands for <span className="text-red-400">H</span>yper <span className="text-red-400">T</span>ext{" "}
+                <span className="text-red-400">M</span>arkup <span className="text-red-400">L</span>anguage and is the
+                backbone of all web pages.
+              </p>
+            </div>
+
+            {/* CTA Boxes */}
+            <div className="grid md:grid-cols-2 gap-6 mb-12">
+              {/* Tutorial Box */}
+              <div className="bg-[#d9f0d8] rounded-lg p-8 text-center">
+                <h3 className="text-2xl font-bold text-black mb-4">HTML Tutorial</h3>
+                <p className="text-black mb-6">
+                  Study our HTML Tutorial for free,
+                  <br />
+                  no registration needed.
+                </p>
+                <button className="px-6 py-3 bg-gray-600 text-white font-semibold rounded cursor-default inline-flex items-center gap-2">
+                  Learn HTML Now »
+                </button>
+              </div>
+
+              {/* Course Box */}
+              <div className="bg-[#fff4cc] rounded-lg p-8 text-center">
+                <h3 className="text-2xl font-bold text-black mb-4">HTML Course + Certificate</h3>
+                <p className="text-black mb-6">
+                  Upgrade your learning with our
+                  <br />
+                  interactive HTML Course and Get Certified.
+                </p>
+                <button className="px-6 py-3 bg-gray-600 text-white font-semibold rounded cursor-default inline-flex items-center gap-2">
+                  + Upgrade to our HTML Course
+                </button>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-8">
+              <div className="h-10 bg-gray-800 rounded overflow-hidden">
+                <div className="h-full w-1/12 bg-green-600"></div>
+              </div>
+            </div>
+
+            {/* Tip Section */}
+            <div className="mb-12 p-4 bg-[#fff4cc] rounded text-black">
+              <p>
+                <strong>Tip:</strong>{" "}
+                <a href="#" className="text-blue-600 hover:underline">
+                  Sign in
+                </a>{" "}
+                to track your progress - it's free.
+              </p>
+            </div>
+
+            {/* Learning by Examples Section */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-white mb-6">Learning by Examples</h2>
+              <p className="text-gray-300 text-lg mb-4">
+                With our "Try it Yourself" editor, you can edit the HTML code and view the result in the browser:
+              </p>
+
+              {/* Code Example Box */}
+              <div className="bg-[#1a1a1a] border border-gray-700 rounded-lg overflow-hidden mb-6">
+                <div className="bg-[#0f0f0f] px-4 py-2 border-b border-gray-700 text-white font-semibold">Example</div>
+                <div className="p-6">
+                  <pre className="text-gray-300 font-mono text-sm leading-relaxed">
+                    <code>
+                      <span className="text-gray-500">&lt;!DOCTYPE html&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;html&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;head&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;title&gt;</span>Page Title
+                      <span className="text-red-400">&lt;/title&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;/head&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;body&gt;</span>
+                      {"\n\n"}
+                      <span className="text-red-400">&lt;h1&gt;</span>This is a Heading
+                      <span className="text-red-400">&lt;/h1&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;p&gt;</span>This is a paragraph.
+                      <span className="text-red-400">&lt;/p&gt;</span>
+                      {"\n\n"}
+                      <span className="text-red-400">&lt;/body&gt;</span>
+                      {"\n"}
+                      <span className="text-red-400">&lt;/html&gt;</span>
+                    </code>
+                  </pre>
+                </div>
+                <div className="bg-[#0f0f0f] px-4 py-3 border-t border-gray-700">
+                  <button className="px-6 py-2 bg-gray-600 text-white font-semibold rounded cursor-default">
+                    Try it Yourself »
+                  </button>
                 </div>
               </div>
 
-              {/* How It Works */}
-              <div>
-                <ScrollReveal size="lg" align="left" containerClassName="mb-6" textClassName="text-white font-bold">
-                  How It Works
-                </ScrollReveal>
-                <ol className="space-y-4">
-                  {[
-                    "Write your message",
-                    "Choose an expiration time",
-                    "Share the link",
-                    "Message auto-destructs after viewing or expiration",
-                  ].map((step, i) => (
-                    <li key={i} className="flex gap-4 p-4 rounded-lg border border-slate-800 bg-slate-950/50">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center text-slate-950 font-bold">
-                        {i + 1}
-                      </span>
-                      <span className="text-slate-300 pt-1">{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              {/* Security Info */}
-              <div className="p-6 rounded-lg border border-slate-700 bg-gradient-to-br from-slate-900/50 to-slate-950/50">
-                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-cyan-400" />
-                  Security
-                </h3>
-                <ul className="space-y-2 text-sm text-slate-300">
-                  <li>• AES-256-GCM encryption on every message</li>
-                  <li>• PBKDF2 key derivation with 100,000 iterations</li>
-                  <li>• Automatic deletion after first read</li>
-                  <li>• Configurable expiration times (30 sec - 1 hour)</li>
-                  <li>• No server-side logs or analytics</li>
-                </ul>
-              </div>
+              <p className="text-gray-400 text-sm">Click on the "Try it Yourself" button to see how it works.</p>
             </div>
-          </section>
 
-          {/* Footer CTA */}
-          <section className="border-t border-slate-800 bg-gradient-to-t from-slate-900/30 to-transparent">
-            <div className="max-w-4xl mx-auto px-6 py-12 text-center">
-              <p className="text-slate-400 mb-6">Ready to share securely?</p>
-              <button
-                onClick={onEnter}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-cyan-500/50"
-              >
-                Open SNDSS
-                <Lock className="w-5 h-5" />
-              </button>
+            {/* What is HTML Section */}
+            <div className="mb-12">
+              <ScrollReveal size="xl" align="left" containerClassName="mb-6" textClassName="text-white font-bold">
+                What is HTML?
+              </ScrollReveal>
+              <ul className="space-y-3 text-gray-300 text-lg list-disc list-inside">
+                <li>HTML stands for Hyper Text Markup Language</li>
+                <li>HTML is the standard markup language for creating Web pages</li>
+                <li>HTML describes the structure of a Web page</li>
+                <li>HTML consists of a series of elements</li>
+                <li>HTML elements tell the browser how to display the content</li>
+                <li>HTML elements label pieces of content such as "this is a heading", "this is a paragraph", etc.</li>
+              </ul>
             </div>
-          </section>
+          </div>
         </main>
       </div>
     </div>
