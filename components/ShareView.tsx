@@ -80,10 +80,10 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
-        <LaserFlow laserColor="rgba(34, 197, 94, 0.6)" lineWidth={2} speed={1} density={20} />
+        <LaserFlow laserColor="rgba(34, 197, 94, 0.3)" lineWidth={1} speed={0.8} density={15} />
         <div className="text-center relative z-10">
-          <div className="animate-spin h-8 w-8 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading shared content...</p>
+          <div className="animate-spin h-8 w-8 border-2 border-green-500/40 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-sm text-gray-400">Loading...</p>
         </div>
       </div>
     )
@@ -92,26 +92,26 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
   if (notFound || expired || !shareData) {
     return (
       <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center p-4">
-        <LaserFlow laserColor="rgba(34, 197, 94, 0.6)" lineWidth={2} speed={1} density={20} />
+        <LaserFlow laserColor="rgba(34, 197, 94, 0.3)" lineWidth={1} speed={0.8} density={15} />
         <Card
-          className="max-w-md w-full relative z-10 bg-black/80 backdrop-blur-xl border-green-500/30"
+          className="max-w-md w-full relative z-10 bg-white border border-gray-200 shadow-lg"
           data-testid="card-not-found"
         >
-          <CardHeader className="text-center">
-            <div className="mx-auto w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mb-4">
-              <AlertCircle className="h-6 w-6 text-green-400" />
+          <CardHeader className="text-center border-b border-gray-100 pb-4">
+            <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+              <AlertCircle className="h-5 w-5 text-gray-600" />
             </div>
-            <CardTitle className="text-white">Content Not Available</CardTitle>
+            <CardTitle className="text-gray-900 text-lg font-semibold">Content Not Available</CardTitle>
           </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <p className="text-gray-400">
+          <CardContent className="text-center space-y-4 pt-6">
+            <p className="text-sm text-gray-600">
               {notFound
                 ? "This content does not exist or has already been deleted."
-                : "This content has expired and been automatically removed for security."}
+                : "This content has expired and been removed."}
             </p>
             <Button
               onClick={onNavigateHome}
-              className="bg-green-600 hover:bg-green-500 text-white"
+              className="bg-black hover:bg-gray-800 text-white text-sm"
               data-testid="button-home"
             >
               <Home className="h-4 w-4 mr-2" />
@@ -124,73 +124,76 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden p-4">
-      <LaserFlow laserColor="rgba(34, 197, 94, 0.6)" lineWidth={2} speed={1} density={20} />
-      <div className="max-w-4xl mx-auto relative z-10 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2" data-testid="title-share">
-              Shared Content
-            </h1>
-            <p className="text-sm text-gray-400">
-              Share ID: <span className="text-green-400 font-mono">{shareData.id}</span>
-            </p>
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      <LaserFlow laserColor="rgba(34, 197, 94, 0.3)" lineWidth={1} speed={0.8} density={15} />
+
+      <div className="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div className="max-w-3xl w-full space-y-4">
+          {/* Header section */}
+          <div className="flex items-center justify-between px-2">
+            <div>
+              <h1 className="text-xl font-semibold text-white mb-1" data-testid="title-share">
+                Shared Content
+              </h1>
+              <p className="text-xs text-gray-400">
+                Share ID: <span className="text-green-400 font-mono text-xs">{shareData.id}</span>
+              </p>
+            </div>
+
+            <div className="text-right">
+              <CountdownTimer expiresAt={shareData.expiresAt} onExpired={handleExpired} />
+              <p className="text-xs text-gray-500 mt-1">Created {new Date(shareData.createdAt).toLocaleString()}</p>
+            </div>
           </div>
 
-          <div className="text-right">
-            <CountdownTimer expiresAt={shareData.expiresAt} onExpired={handleExpired} />
-            <p className="text-xs text-gray-500 mt-1">Created {new Date(shareData.createdAt).toLocaleString()}</p>
+          {/* Main content card - clean white design */}
+          <Card className="bg-white border border-gray-200 shadow-xl" data-testid="card-content">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-gray-700" />
+                <CardTitle className="text-base text-gray-900 font-semibold">Content</CardTitle>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge
+                  variant="secondary"
+                  className="bg-gray-100 text-gray-700 border-0 text-xs font-medium"
+                  data-testid="badge-readonly"
+                >
+                  Read Only
+                </Badge>
+                <Button
+                  onClick={handleCopy}
+                  size="sm"
+                  className="bg-black hover:bg-gray-800 text-white text-xs h-8"
+                  data-testid="button-copy-content"
+                >
+                  <Copy className="h-3 w-3 mr-1" />
+                  Copy
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <pre className="text-sm font-mono overflow-x-auto whitespace-pre-wrap text-gray-800 leading-relaxed">
+                  <code data-testid="content-display">{shareData.content}</code>
+                </pre>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Footer actions */}
+          <div className="text-center space-y-3 px-2">
+            <Button
+              onClick={onNavigateHome}
+              className="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 text-sm h-10"
+              data-testid="button-back-home"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Create Your Own Share
+            </Button>
+
+            <p className="text-xs text-gray-400">This content will be automatically deleted when the timer expires.</p>
           </div>
-        </div>
-
-        <Card
-          className="bg-black/90 backdrop-blur-xl border-2 border-green-500/40 shadow-2xl shadow-green-500/10"
-          data-testid="card-content"
-        >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-green-500/20">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-green-400" />
-              <CardTitle className="text-lg text-white font-semibold">Content</CardTitle>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge
-                variant="secondary"
-                className="bg-green-500/20 text-green-400 border border-green-500/40 font-medium"
-                data-testid="badge-readonly"
-              >
-                Read Only
-              </Badge>
-              <Button
-                onClick={handleCopy}
-                size="sm"
-                className="bg-green-600 hover:bg-green-500 text-white border border-green-500/40 shadow-lg hover:shadow-green-500/20 transition-all"
-                data-testid="button-copy-content"
-              >
-                <Copy className="h-4 w-4 mr-1" />
-                Copy
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="bg-black/70 p-6 rounded-lg border border-green-500/30 shadow-inner">
-              <pre className="text-sm font-mono overflow-x-auto whitespace-pre-wrap text-gray-200 leading-relaxed">
-                <code data-testid="content-display">{shareData.content}</code>
-              </pre>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="mt-8 text-center space-y-4">
-          <Button
-            onClick={onNavigateHome}
-            className="bg-gray-900 hover:bg-gray-800 text-white border border-green-500/30 shadow-lg hover:shadow-green-500/20 transition-all"
-            data-testid="button-back-home"
-          >
-            <Home className="h-4 w-4 mr-2" />
-            Create Your Own Share
-          </Button>
-
-          <p className="text-xs text-gray-500">This content will be automatically deleted when the timer expires.</p>
         </div>
       </div>
     </div>
