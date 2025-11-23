@@ -1,15 +1,14 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
-  title: "EphemeralShare - Secure Ephemeral Message Sharing",
-  description: "Share secrets that self-destruct. End-to-end encrypted, one-time viewing.",
+  title: "SNDSS - Secure Message Sharing",
+  description: "Share secure messages that auto-delete. Privacy-focused ephemeral text sharing.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -37,10 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        {children}
-        <Analytics />
-      </body>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>{children}</body>
     </html>
   )
 }
