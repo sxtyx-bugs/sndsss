@@ -1,93 +1,138 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { Lock, Eye, Clock, ChevronRight } from "lucide-react"
 
 interface StealthLandingProps {
   onEnter: () => void
 }
 
 export default function StealthLanding({ onEnter }: StealthLandingProps) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black">
-      {/* Navigation */}
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--bg-primary)" }}>
+      {/* Minimal Header */}
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="px-6 md:px-12 py-4 flex items-center justify-between border-b border-gray-200"
+        transition={{ duration: 0.6 }}
+        className="px-6 md:px-12 py-8 flex items-center justify-between border-b"
+        style={{ borderColor: "rgba(210, 180, 222, 0.1)" }}
       >
-        <div className="text-xl font-bold">CodeLearn</div>
-        <div className="hidden md:flex gap-8 items-center text-sm">
-          <a href="#" className="hover:text-gray-600">
-            Tutorials
-          </a>
-          <a href="#" className="hover:text-gray-600">
-            Documentation
-          </a>
-          <a href="#" className="hover:text-gray-600">
-            Examples
-          </a>
-          <a href="#" className="hover:text-gray-600">
-            FAQ
-          </a>
-        </div>
+        <motion.div
+          className="text-xl font-bold font-mono"
+          style={{ color: "var(--accent-neon)" }}
+          animate={{
+            textShadow: [
+              "0 0 10px rgba(210, 180, 222, 0.5)",
+              "0 0 20px rgba(210, 180, 222, 0.8)",
+              "0 0 10px rgba(210, 180, 222, 0.5)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+        >
+          EPHEMERAL
+        </motion.div>
         <motion.button
           onClick={onEnter}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(210, 180, 222, 0.4)" }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-2 bg-black text-white rounded-full font-semibold text-sm"
+          className="px-6 py-2 rounded font-semibold text-white flex items-center gap-2 elevation-sm"
+          style={{
+            background: "var(--border-glow)",
+            color: "var(--bg-primary)",
+          }}
         >
-          Open Tool
+          Enter
+          <ChevronRight size={16} />
         </motion.button>
-      </motion.nav>
+      </motion.header>
 
       {/* Hero Section */}
       <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="flex-1 flex items-center justify-center px-6 md:px-12 py-20 md:py-0"
+        className="flex-1 flex items-center justify-center px-6 md:px-12 py-20"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        <div className="max-w-4xl w-full space-y-8">
-          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Learn Web Development the Right Way</h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Master modern web technologies with interactive tutorials, real-world examples, and hands-on practice.
-              Start your coding journey today.
-            </p>
+        <div className="max-w-3xl w-full space-y-12">
+          {/* Main Title */}
+          <motion.div variants={itemVariants} className="space-y-4">
+            <motion.h1
+              className="text-5xl md:text-7xl font-bold font-mono tracking-tight leading-tight"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Share Secrets
+              <br />
+              <span className="neon-text">That Disappear</span>
+            </motion.h1>
+            <motion.p className="text-lg md:text-xl" style={{ color: "var(--text-secondary)" }}>
+              End-to-end encrypted ephemeral message sharing. One view, then gone.
+            </motion.p>
           </motion.div>
 
-          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+          {/* CTA Button */}
+          <motion.div variants={itemVariants}>
             <motion.button
               onClick={onEnter}
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(210, 180, 222, 0.5)" }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-black text-white rounded-full font-semibold text-lg"
+              className="px-8 py-4 rounded font-semibold text-white flex items-center gap-3 elevation-md"
+              style={{
+                background: "var(--border-glow)",
+                color: "var(--bg-primary)",
+              }}
             >
-              Start Coding Now
+              Start Securely Sharing
+              <motion.div animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
+                <ChevronRight size={20} />
+              </motion.div>
             </motion.button>
           </motion.div>
 
-          {/* Feature Grid */}
+          {/* Features Grid */}
           <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-16 border-t border-gray-200"
+            variants={itemVariants}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 pt-16"
+            style={{ borderTop: "1px solid rgba(210, 180, 222, 0.1)" }}
           >
             {[
-              { title: "Interactive Editor", desc: "Write, run, and debug code in real-time" },
-              { title: "Live Feedback", desc: "Get instant feedback as you learn" },
-              { title: "Best Practices", desc: "Learn industry standards and patterns" },
+              { icon: Lock, title: "AES-256 Encrypted", desc: "Military-grade encryption" },
+              { icon: Eye, title: "View Once", desc: "Auto-deletes after reading" },
+              { icon: Clock, title: "Time-Based Expiry", desc: "Messages self-destruct" },
             ].map((feature, i) => (
               <motion.div
                 key={i}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 + i * 0.1 }}
-                className="space-y-2 p-4"
+                variants={itemVariants}
+                className="space-y-3 p-4 rounded"
+                style={{ background: "rgba(31, 38, 64, 0.3)" }}
               >
-                <h3 className="font-bold text-lg">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.desc}</p>
+                <feature.icon size={24} style={{ color: "var(--border-glow)" }} />
+                <h3 className="font-bold text-lg" style={{ color: "var(--text-primary)" }}>
+                  {feature.title}
+                </h3>
+                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                  {feature.desc}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -98,24 +143,13 @@ export default function StealthLanding({ onEnter }: StealthLandingProps) {
       <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="border-t border-gray-200 px-6 md:px-12 py-8"
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="px-6 md:px-12 py-8 text-center border-t"
+        style={{ borderColor: "rgba(210, 180, 222, 0.1)" }}
       >
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {["Product", "Learn", "Resources", "Company"].map((section, i) => (
-            <div key={i} className="space-y-3">
-              <h4 className="font-bold text-sm">{section}</h4>
-              {["Link One", "Link Two", "Link Three"].map((link, j) => (
-                <a key={j} href="#" className="block text-sm text-gray-600 hover:text-black">
-                  {link}
-                </a>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
-          <p>© 2025 CodeLearn. All rights reserved.</p>
-        </div>
+        <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          © 2025 EphemeralShare. End-to-end encrypted message sharing.
+        </p>
       </motion.footer>
     </div>
   )
