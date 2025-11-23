@@ -10,6 +10,7 @@ import { Copy, Clock, Share, AlertTriangle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import DotGrid from "@/components/DotGrid"
 import { ToggleTheme } from "@/components/ToggleTheme"
+import { RecentShares } from "@/components/RecentShares"
 
 interface ShareResult {
   id: string
@@ -295,7 +296,11 @@ export default function ShareApp() {
             </div>
           )}
 
-          <div className="text-center text-sm text-gray-500 dark:text-gray-600">
+          <div className="mt-8">
+            <RecentShares />
+          </div>
+
+          <div className="text-center text-sm text-gray-500 dark:text-gray-600 mt-6">
             <p>All shares are automatically deleted after expiration. No permanent storage.</p>
           </div>
         </div>

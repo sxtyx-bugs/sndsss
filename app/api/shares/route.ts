@@ -67,6 +67,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to create share: No data returned" }, { status: 500 })
     }
 
+    const { error: recentShareError } = await supabase.from("recent_shares").insert({
+      message_id: data.id,
+    })
+
+    if (recentShareError) {
+      console.error("[v0] Failed to add to recent_shares:", recentShareError.message)
+      // Don't fail the request if recent_shares insert fails
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
     console.log("[v0] NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL)
     console.log("[v0] request.nextUrl.origin:", request.nextUrl.origin)
