@@ -29,21 +29,11 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
 
   useEffect(() => {
     const fetchShare = async () => {
-      console.log("[v0] ShareView mounted with shareId:", shareId)
-      console.log("[v0] Current URL:", window.location.href)
-      console.log("[v0] Fetching share data for:", shareId)
       setLoading(true)
 
       try {
         const { getShare } = await import("@/lib/api")
-        console.log("[v0] About to fetch from API:", `/api/shares/${shareId}`)
-
         const data = await getShare(shareId)
-        console.log("[v0] Share data received:", {
-          id: data.id,
-          contentLength: data.content?.length,
-          expiresAt: data.expiresAt,
-        })
         setShareData({
           id: data.id,
           content: data.content,
@@ -51,9 +41,6 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
           createdAt: data.createdAt,
         })
       } catch (error: any) {
-        console.error("[v0] Error fetching share:", error)
-        console.error("[v0] Error message:", error.message)
-        console.error("[v0] Error stack:", error.stack)
         if (error.message && (error.message.includes("404") || error.message.includes("expired"))) {
           setNotFound(true)
         } else {
@@ -76,7 +63,6 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
         title: "Copied!",
         description: "Content copied to clipboard.",
       })
-      console.log("[v0] Content copied to clipboard")
     } catch (err) {
       toast({
         title: "Copy Failed",
@@ -88,7 +74,6 @@ export default function ShareView({ shareId, onNavigateHome }: ShareViewProps) {
 
   const handleExpired = () => {
     setExpired(true)
-    console.log("[v0] Share has expired")
   }
 
   if (loading) {

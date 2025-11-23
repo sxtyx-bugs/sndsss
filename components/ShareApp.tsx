@@ -34,22 +34,18 @@ export default function ShareApp() {
     }
 
     setIsSharing(true)
-    console.log("[v0] Sharing content with expiration...", { content, expirationTime })
 
     try {
       let expirationMs = 0
 
       if (expirationTime.endsWith("s")) {
-        // Format: "30s" - parse seconds
         expirationMs = Number.parseInt(expirationTime.slice(0, -1)) * 1000
       } else {
-        // Format: "30" - parse as minutes
         expirationMs = Number.parseInt(expirationTime) * 60 * 1000
       }
 
       const expiresAt = new Date(Date.now() + expirationMs)
 
-      console.log("[v0] About to call createShare API...", { expiresAt })
       const { createShare } = await import("@/lib/api")
 
       const result = await createShare({
@@ -57,7 +53,6 @@ export default function ShareApp() {
         expiresAt: expiresAt.toISOString(),
       })
 
-      console.log("[v0] createShare completed with result:", result)
       setShareResult({
         id: result.id,
         url: result.url,
@@ -68,8 +63,6 @@ export default function ShareApp() {
         description: "Your content is ready to share.",
       })
     } catch (error: any) {
-      console.error("[v0] Detailed error creating share:", error)
-
       let errorMessage = "An unexpected error occurred. Please try again."
       if (error instanceof Error) {
         errorMessage = error.message
@@ -88,23 +81,16 @@ export default function ShareApp() {
   }
 
   const handleCopy = async (text: string) => {
-    console.log("[v0] Copy function called with text:", text)
-
     try {
-      console.log("[v0] Secure context:", window.isSecureContext)
-      console.log("[v0] Clipboard API available:", !!navigator.clipboard)
-
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text)
         toast({
           title: "Copied!",
           description: "URL copied to clipboard.",
         })
-        console.log("[v0] URL copied to clipboard via Clipboard API")
         return
       }
 
-      console.log("[v0] Using fallback copy method")
       const textArea = document.createElement("textarea")
       textArea.value = text
       textArea.style.position = "fixed"
@@ -122,29 +108,21 @@ export default function ShareApp() {
           title: "Copied!",
           description: "URL copied to clipboard.",
         })
-        console.log("[v0] URL copied to clipboard via fallback method")
       } else {
         throw new Error("Copy command failed")
       }
     } catch (err) {
-      console.error("[v0] Copy failed:", err)
-      const urlInput = document.querySelector('[data-testid="input-share-url"]') as HTMLInputElement
-      if (urlInput) {
-        urlInput.select()
-        urlInput.setSelectionRange(0, 99999)
-        toast({
-          title: "Please Copy Manually",
-          description: "The URL has been selected. Press Ctrl+C (or Cmd+C) to copy.",
-          variant: "destructive",
-        })
-      }
+      toast({
+        title: "Copy Failed",
+        description: "Please copy the URL manually",
+        variant: "destructive",
+      })
     }
   }
 
   const resetForm = () => {
     setContent("")
     setShareResult(null)
-    console.log("[v0] Form reset")
   }
 
   return (
