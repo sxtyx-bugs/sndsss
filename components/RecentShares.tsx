@@ -10,9 +10,7 @@ interface RecentShare {
   id: string
   message_id: string
   created_at: string
-  messages: {
-    expires_at: string
-  }
+  expires_at?: string
 }
 
 export function RecentShares() {
@@ -35,16 +33,13 @@ export function RecentShares() {
     const fetchRecentShares = async () => {
       const { data, error } = await supabase
         .from("recent_shares")
-        .select(`
-          *,
-          messages!inner(expires_at)
-        `)
-        .gt("messages.expires_at", new Date().toISOString())
+        .select("*")
         .order("created_at", { ascending: false })
         .limit(20)
 
       if (error) {
         console.error("[v0] Error fetching recent shares:", error)
+        setRecentShares([])
       } else {
         setRecentShares(data || [])
       }
@@ -53,36 +48,34 @@ export function RecentShares() {
 
     fetchRecentShares()
 
-    const cleanupInterval = setInterval(async () => {
-      const now = new Date().toISOString()
-      setRecentShares((prev) => {
-        return prev.filter((share) => {
-          // Remove shares that have expired
-          const shareDate = new Date(share.created_at)
-          // Assuming max 1 hour expiry, we check against that
-          return true // The query filter handles this now
-        })
-      })
-
-      // Re-fetch to ensure we have accurate data
+    const cleanupInterval = setInterval(() => {
       fetchRecentShares()
-    }, 10000)
+    }, 30000)
 
     const channel = supabase
       .channel("recent-shares-changes")
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
           schema: "public",
           table: "recent_shares",
         },
         (payload) => {
-          if (payload.eventType === "INSERT") {
-            setRecentShares((prev) => [payload.new as RecentShare, ...prev].slice(0, 20))
-          } else if (payload.eventType === "DELETE") {
-            setRecentShares((prev) => prev.filter((share) => share.id !== payload.old.id))
-          }
+          // Add new share to the top of the list
+          setRecentShares((prev) => [payload.new as RecentShare, ...prev].slice(0, 20))
+        },
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "recent_shares",
+        },
+        (payload) => {
+          // Remove deleted share from the list
+          setRecentShares((prev) => prev.filter((share) => share.id !== payload.old.id))
         },
       )
       .subscribe()
@@ -116,11 +109,7 @@ export function RecentShares() {
     router.push(`/m/${messageId}`)
   }
 
-  if (isLoading) {
-    return null
-  }
-
-  if (recentShares.length === 0) {
+  if (isLoading || recentShares.length === 0) {
     return null
   }
 
