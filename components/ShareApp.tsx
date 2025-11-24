@@ -87,8 +87,9 @@ export default function ShareApp() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text)
         toast({
-          title: "Copied!",
-          description: "URL copied to clipboard.",
+          title: "✓ Copied!",
+          description: "URL copied to clipboard successfully.",
+          className: "bg-green-600 text-white border-green-500",
         })
         return
       }
@@ -107,8 +108,9 @@ export default function ShareApp() {
 
       if (successful) {
         toast({
-          title: "Copied!",
-          description: "URL copied to clipboard.",
+          title: "✓ Copied!",
+          description: "URL copied to clipboard successfully.",
+          className: "bg-green-600 text-white border-green-500",
         })
       } else {
         throw new Error("Copy command failed")
@@ -265,7 +267,7 @@ export default function ShareApp() {
                     <Button
                       onClick={() => handleCopy(shareResult.url)}
                       size="icon"
-                      className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 border-green-500/30"
+                      className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 border-green-500/30 shadow-md hover:shadow-lg hover:scale-110 transition-all duration-200 cursor-pointer active:scale-95"
                     >
                       <Copy className="h-4 w-4" />
                     </Button>
@@ -280,14 +282,14 @@ export default function ShareApp() {
                 <div className="flex gap-2">
                   <Button
                     onClick={() => handleCopy(shareResult.url)}
-                    className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-500/20"
+                    className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white shadow-lg shadow-green-500/20 hover:shadow-green-500/40 hover:scale-105 transition-all duration-200 cursor-pointer active:scale-95"
                   >
                     <Copy className="h-4 w-4 mr-2" />
                     Copy Link
                   </Button>
                   <Button
                     onClick={resetForm}
-                    className="bg-gray-700 hover:bg-gray-600 dark:bg-gray-200 dark:hover:bg-gray-300 text-white dark:text-gray-900 border-gray-600 dark:border-gray-300"
+                    className="bg-gray-700 hover:bg-gray-600 dark:bg-gray-200 dark:hover:bg-gray-300 text-white dark:text-gray-900 border-gray-600 dark:border-gray-300 hover:scale-105 transition-all duration-200 cursor-pointer active:scale-95"
                   >
                     Create Another
                   </Button>

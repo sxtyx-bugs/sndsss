@@ -10,6 +10,9 @@ interface RecentShare {
   id: string
   message_id: string
   created_at: string
+  messages: {
+    expires_at: string
+  }
 }
 
 export function RecentShares() {
@@ -29,11 +32,14 @@ export function RecentShares() {
 
     const supabase = createBrowserClient(supabaseUrl, supabaseKey)
 
-    // Fetch initial recent shares
     const fetchRecentShares = async () => {
       const { data, error } = await supabase
         .from("recent_shares")
-        .select("*")
+        .select(`
+          *,
+          messages!inner(expires_at)
+        `)
+        .gt("messages.expires_at", new Date().toISOString())
         .order("created_at", { ascending: false })
         .limit(20)
 
@@ -47,6 +53,21 @@ export function RecentShares() {
 
     fetchRecentShares()
 
+    const cleanupInterval = setInterval(async () => {
+      const now = new Date().toISOString()
+      setRecentShares((prev) => {
+        return prev.filter((share) => {
+          // Remove shares that have expired
+          const shareDate = new Date(share.created_at)
+          // Assuming max 1 hour expiry, we check against that
+          return true // The query filter handles this now
+        })
+      })
+
+      // Re-fetch to ensure we have accurate data
+      fetchRecentShares()
+    }, 10000)
+
     const channel = supabase
       .channel("recent-shares-changes")
       .on(
@@ -57,8 +78,6 @@ export function RecentShares() {
           table: "recent_shares",
         },
         (payload) => {
-          console.log("[v0] Real-time update received:", payload)
-
           if (payload.eventType === "INSERT") {
             setRecentShares((prev) => [payload.new as RecentShare, ...prev].slice(0, 20))
           } else if (payload.eventType === "DELETE") {
@@ -69,6 +88,7 @@ export function RecentShares() {
       .subscribe()
 
     return () => {
+      clearInterval(cleanupInterval)
       supabase.removeChannel(channel)
     }
   }, [])
@@ -97,48 +117,43 @@ export function RecentShares() {
   }
 
   if (isLoading) {
-    return (
-      <div className="glass-dark dark:bg-white/90 dark:border-gray-300 rounded-2xl p-6 backdrop-blur-xl bg-black/80 border border-green-500/20 shadow-2xl transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-white dark:text-gray-900 mb-4">Recent Shares</h3>
-        <p className="text-gray-400 dark:text-gray-600 text-sm">Loading...</p>
-      </div>
-    )
+    return null
+  }
+
+  if (recentShares.length === 0) {
+    return null
   }
 
   return (
     <div className="glass-dark dark:bg-white/90 dark:border-gray-300 rounded-2xl p-6 backdrop-blur-xl bg-black/80 border border-green-500/20 shadow-2xl transition-colors duration-300">
       <h3 className="text-lg font-semibold text-white dark:text-gray-900 mb-4">Recent Shares</h3>
 
-      {recentShares.length === 0 ? (
-        <p className="text-gray-400 dark:text-gray-600 text-sm">No recent shares yet. Be the first to create one!</p>
-      ) : (
-        <div className="space-y-2 max-h-[400px] overflow-y-auto">
-          {recentShares.map((share) => (
-            <div
-              key={share.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-black/50 dark:bg-white/50 border border-green-500/10 dark:border-gray-200 hover:border-green-500/30 dark:hover:border-green-300 transition-all"
-            >
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <Clock className="h-4 w-4 text-green-400 dark:text-green-600 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono text-gray-400 dark:text-gray-600 truncate">
-                    {share.message_id.slice(0, 8)}...
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-500">{getTimeAgo(share.created_at)}</p>
-                </div>
+      <div className="space-y-2 max-h-[400px] overflow-y-auto">
+        {recentShares.map((share) => (
+          <div
+            key={share.id}
+            className="flex items-center justify-between p-3 rounded-lg bg-black/50 dark:bg-white/50 border border-green-500/10 dark:border-gray-200 hover:border-green-500/30 dark:hover:border-green-300 transition-all"
+          >
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <Clock className="h-4 w-4 text-green-400 dark:text-green-600 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-mono text-gray-400 dark:text-gray-600 truncate">
+                  {share.message_id.slice(0, 8)}...
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">{getTimeAgo(share.created_at)}</p>
               </div>
-              <Button
-                onClick={() => handleOpen(share.message_id)}
-                size="sm"
-                className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white text-xs h-8 flex-shrink-0"
-              >
-                <ExternalLink className="h-3 w-3 mr-1" />
-                Open
-              </Button>
             </div>
-          ))}
-        </div>
-      )}
+            <Button
+              onClick={() => handleOpen(share.message_id)}
+              size="sm"
+              className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white text-xs h-8 flex-shrink-0 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              <ExternalLink className="h-3 w-3 mr-1" />
+              Open
+            </Button>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
