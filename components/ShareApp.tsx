@@ -220,6 +220,12 @@ export default function ShareApp() {
                       >
                         1 hour
                       </SelectItem>
+                      <SelectItem
+                        value="180"
+                        className="text-white dark:text-gray-900 hover:bg-green-500/20 dark:hover:bg-green-100"
+                      >
+                        3 hours
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

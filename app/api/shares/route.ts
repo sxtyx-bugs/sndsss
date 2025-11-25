@@ -76,6 +76,22 @@ export async function POST(request: NextRequest) {
       // Don't fail the request if recent_shares insert fails
     }
 
+    const { data: allShares, error: countError } = await supabase
+      .from("recent_shares")
+      .select("id, created_at")
+      .order("created_at", { ascending: false })
+
+    if (!countError && allShares && allShares.length > 5) {
+      const sharesToDelete = allShares.slice(5)
+      const idsToDelete = sharesToDelete.map((s) => s.id)
+
+      const { error: deleteError } = await supabase.from("recent_shares").delete().in("id", idsToDelete)
+
+      if (deleteError) {
+        console.error("[v0] Failed to delete old shares:", deleteError.message)
+      }
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
     console.log("[v0] NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL)
     console.log("[v0] request.nextUrl.origin:", request.nextUrl.origin)

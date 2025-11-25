@@ -35,7 +35,7 @@ export function RecentShares() {
         .from("recent_shares")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(20)
+        .limit(5)
 
       if (error) {
         console.error("[v0] Error fetching recent shares:", error)
@@ -62,8 +62,7 @@ export function RecentShares() {
           table: "recent_shares",
         },
         (payload) => {
-          // Add new share to the top of the list
-          setRecentShares((prev) => [payload.new as RecentShare, ...prev].slice(0, 20))
+          setRecentShares((prev) => [payload.new as RecentShare, ...prev].slice(0, 5))
         },
       )
       .on(
@@ -74,7 +73,6 @@ export function RecentShares() {
           table: "recent_shares",
         },
         (payload) => {
-          // Remove deleted share from the list
           setRecentShares((prev) => prev.filter((share) => share.id !== payload.old.id))
         },
       )
