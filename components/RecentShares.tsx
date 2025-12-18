@@ -10,7 +10,6 @@ interface RecentShare {
   id: string
   message_id: string
   created_at: string
-  expires_at?: string
 }
 
 export function RecentShares() {
@@ -48,10 +47,6 @@ export function RecentShares() {
 
     fetchRecentShares()
 
-    const cleanupInterval = setInterval(() => {
-      fetchRecentShares()
-    }, 30000)
-
     const channel = supabase
       .channel("recent-shares-changes")
       .on(
@@ -79,7 +74,6 @@ export function RecentShares() {
       .subscribe()
 
     return () => {
-      clearInterval(cleanupInterval)
       supabase.removeChannel(channel)
     }
   }, [])
@@ -133,7 +127,7 @@ export function RecentShares() {
             <Button
               onClick={() => handleOpen(share.message_id)}
               size="sm"
-              className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white text-xs h-8 flex-shrink-0 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer active:scale-95"
+              className="bg-green-600 hover:bg-green-500 dark:bg-green-600 dark:hover:bg-green-700 text-white text-xs h-8 flex-shrink-0 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 active:scale-95"
             >
               <ExternalLink className="h-3 w-3 mr-1" />
               Open
